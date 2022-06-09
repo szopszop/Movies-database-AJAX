@@ -27,6 +27,7 @@ def most_rated():
 @app.route('/show/<id_>')
 def single_show(id_):
     show = queries.get_single_show(id_)
+    print(show)
     return render_template('single-show.html', show=show)
 
 

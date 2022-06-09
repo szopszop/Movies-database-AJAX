@@ -7,25 +7,31 @@ def get_shows():
 
 def get_single_show(show_id):
     return data_manager.execute_select("""
-    SELECT shows.id, shows.title, EXTRACT(YEAR FROM shows.year) AS year,
-    shows.runtime,ROUND(shows.rating, 1) AS rating,
-    STRING_AGG(genres.name, ', ' ORDER BY genres.name) AS genre,
-    shows.trailer, shows.homepage
+    SELECT shows.id, shows.title,
+            TO_CHAR(shows.year, 'dd-Month-YYYY') AS date,
+            shows.runtime,ROUND(shows.rating, 1) AS rating,
+            STRING_AGG(DISTINCT genres.name, ', ' ORDER BY genres.name) AS genre,
+            shows.trailer, shows.homepage,
+            STRING_AGG(DISTINCT seasons.overview, ' ') AS overview
     FROM shows
     JOIN show_genres ON shows.id = show_genres.show_id
     JOIN genres ON show_genres.genre_id = genres.id
-    WHERE show_id = %(show_id)s
-    GROUP BY  shows.id, shows.rating
+    JOIN show_characters ON shows.id = show_characters.show_id
+    JOIN actors ON show_characters.actor_id = actors.id
+    JOIN seasons ON shows.id = seasons.show_id
+    JOIN episodes ON seasons.id = episodes.season_id
+    WHERE shows.id = %(show_id)s
+    GROUP BY  shows.id, shows.rating, seasons.show_id
     ORDER BY shows.rating DESC
-    ;""", show_id, fetchall=False)
+    ;""", {'show_id': show_id}, fetchall=False)
 
 
 def get_most_rated_shows():
     return data_manager.execute_select("""
     SELECT shows.id, shows.title, EXTRACT(YEAR FROM shows.year) AS year,
-    shows.runtime,ROUND(shows.rating, 1) AS rating,
-    STRING_AGG(genres.name, ', ' ORDER BY genres.name) AS genre,
-    shows.trailer, shows.homepage
+            shows.runtime,ROUND(shows.rating, 1) AS rating,
+            STRING_AGG(genres.name, ', ' ORDER BY genres.name) AS genre,
+            shows.trailer, shows.homepage
     FROM shows
     JOIN show_genres ON shows.id = show_genres.show_id
     JOIN genres ON show_genres.genre_id = genres.id
