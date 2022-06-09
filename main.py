@@ -20,7 +20,8 @@ def design():
 
 @app.route('/shows/most-rated')
 def most_rated():
-    rows_per_page = 10
+    # rows_per_page = request.args.get('rows')
+    rows_per_page = 15
     page = request.args.get('page')
     if page is None or not page.isdigit():
         page = 1

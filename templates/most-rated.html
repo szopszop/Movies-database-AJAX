@@ -33,7 +33,7 @@
         {% if page_now == 1 %}
             <<
         {% else %}
-            <a href="?page={{ page_now -1 }}"><<</a>
+            <a href="?page={{ page_now - 1 }}"><<</a>
         {% endif %}
 
         {% for page in range(1, pages + 1) %}
@@ -45,6 +45,16 @@
         {% else %}
             <a href="?page={{ page_now + 1 }}">>></a>
         {% endif %}
+{#        <div class="dropdown">#}
+{#            <br>#}
+{#            <button class="dropbtn">Shows per page</button>#}
+{#            <div class="dropdown-content">#}
+{#                <a href="rows=10">10</a>#}
+{#                <a href="rows=20">20</a>#}
+{#                <a href="rows=30">30</a>#}
+{#            </div>#}
+{#        </div>#}
+
     </div>
 </section>
 {% endblock %}
