@@ -2,43 +2,49 @@
 {% block title %}Shows{% endblock %}
 {% block body %}
 
-    <section>
-        <h1 class="title text-center">Shows</h1>
-        <div class="card">
-            <table>
+<section>
+    <h1 class="title text-center">Shows</h1>
+    <div class="card">
+        <table>
+            <tr>
+                <th class="action-column">Title</th>
+                <th>Year</th>
+                <th>Runtime</th>
+                <th>Rating</th>
+                <th>Genre</th>
+                <th class="action-column">Trailer</th>
+                <th class="action-column">Homepage</th>
+            </tr>
+            {% for show in shows %}
                 <tr>
-                    <th class="action-column">Title</th>
-                    <th>Year</th>
-                    <th>Runtime</th>
-                    <th>Rating</th>
-                    <th>Genre</th>
-                    <th class="action-column">Trailer</th>
-                    <th class="action-column">Homepage</th>
+                    <td><a href="/show/{{ show.id }}">{{ show.title }}</a></td>
+                    <td>{{ show.year }}</td>
+                    <td>{{ show.runtime }}</td>
+                    <td>{{ show.rating }}</td>
+                    <td>{{ show.genre }}</td>
+                    <td>{% if show.trailer is not none %}<a href="{{ show.trailer }}">{{ show.trailer }}{% else %}No URL{% endif %}</a></td>
+                    <td>{% if show.homepage is not none %}<a href="{{ show.homepage }}">{{ show.homepage }}{% else %}No URL{% endif %}
+                    </a></td>
                 </tr>
-                {% for show in shows %}
-                    <tr>
-                        <td><a href="/show/{{ show.id }}">{{ show.title }}</a></td>
-                        <td>{{ show.year }}</td>
-                        <td>{{ show.runtime }}</td>
-                        <td>{{ show.rating }}</td>
-                        <td>{{ show.genre }}</td>
-                        <td>{% if show.trailer is not none %}
-                            <a href="{{ show.trailer }}">
-                                {{ show.trailer }}
-                            {% else %}
-                                No URL
-                            {% endif %}
-                        </a></td>
-                        <td>{% if show.homepage is not none %}
-                            <a href="{{ show.homepage }}">
-                                {{ show.homepage }}
-                            {% else %}
-                                No URL
-                            {% endif %}
-                        </a></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </section>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="card text-center">
+        {% if page_now == 1 %}
+            <<
+        {% else %}
+            <a href="?page={{ page_now -1 }}"><<</a>
+        {% endif %}
+
+        {% for page in range(1, pages + 1) %}
+            <a href="?page={{ page }}">{% if page_now == page %}<mark>{{ page }}</mark>{% else %}{{ page }}{% endif %}</a>
+        {% endfor %}
+
+        {% if page_now == pages %}
+            >>
+        {% else %}
+            <a href="?page={{ page_now + 1 }}">>></a>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

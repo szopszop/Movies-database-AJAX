@@ -5,6 +5,21 @@ def get_shows():
     return data_manager.execute_select('SELECT id, title FROM shows;')
 
 
+def get_most_rated_shows(page=1, rows_per_page=15):
+    offset_query = 'OFFSET %(offset)s' if page > 1 else ';'
+    return data_manager.execute_select("""
+    SELECT shows.id, shows.title, EXTRACT(YEAR FROM shows.year) AS year,
+            shows.runtime,ROUND(shows.rating, 1) AS rating,
+            STRING_AGG(genres.name, ', ' ORDER BY genres.name) AS genre,
+            shows.trailer, shows.homepage
+    FROM shows
+    JOIN show_genres ON shows.id = show_genres.show_id
+    JOIN genres ON show_genres.genre_id = genres.id
+    GROUP BY  shows.id, shows.rating
+    ORDER BY shows.rating DESC
+    LIMIT """ + str(rows_per_page) + offset_query, variables={'offset': (page - 1) * rows_per_page})
+
+
 def get_single_show(show_id):
     return data_manager.execute_select("""
     SELECT shows.id, shows.title,
@@ -26,16 +41,5 @@ def get_single_show(show_id):
     ;""", {'show_id': show_id}, fetchall=False)
 
 
-def get_most_rated_shows():
-    return data_manager.execute_select("""
-    SELECT shows.id, shows.title, EXTRACT(YEAR FROM shows.year) AS year,
-            shows.runtime,ROUND(shows.rating, 1) AS rating,
-            STRING_AGG(genres.name, ', ' ORDER BY genres.name) AS genre,
-            shows.trailer, shows.homepage
-    FROM shows
-    JOIN show_genres ON shows.id = show_genres.show_id
-    JOIN genres ON show_genres.genre_id = genres.id
-    GROUP BY  shows.id, shows.rating
-    ORDER BY shows.rating DESC
-    LIMIT 15
-    ;""")
+def get_shows_count():
+    return data_manager.execute_select('SELECT COUNT(*) AS count FROM shows;', fetchall=False)
