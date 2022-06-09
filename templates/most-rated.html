@@ -30,20 +30,37 @@
         </table>
     </div>
     <div class="card text-center">
+
         {% if page_now == 1 %}
+            <strong><<<</strong>
             <<
+            {% for page in range(page_now, page_now + 5) %}
+                <a href="?page={{ page }}">{% if page_now == page %}<mark>{{ page }}</mark>{% else %}{{ page }}{% endif %}</a>
+            {% endfor %}
         {% else %}
+            <a href="?page=1"><strong><<<</strong></a>
             <a href="?page={{ page_now - 1 }}"><<</a>
         {% endif %}
+        {% if page_now == 2 %}
+            {% for page in range(page_now-1, page_now + 4) %}
+                <a href="?page={{ page }}">{% if page_now == page %}<mark>{{ page }}</mark>{% else %}{{ page }}{% endif %}</a>
+            {% endfor %}
+        {% endif %}
 
-        {% for page in range(1, pages + 1) %}
-            <a href="?page={{ page }}">{% if page_now == page %}<mark>{{ page }}</mark>{% else %}{{ page }}{% endif %}</a>
-        {% endfor %}
+        {% if page_now > 2 %}
+            {% for page in range(page_now - 2, page_now + 3) %}
+                <a href="?page={{ page }}">{% if page_now == page %}<mark>{{ page }}</mark>{% else %}{{ page }}{% endif %}</a>
+            {% endfor %}
+        {% endif %}
+
+
 
         {% if page_now == pages %}
             >>
+            <strong>>>></strong>
         {% else %}
             <a href="?page={{ page_now + 1 }}">>></a>
+            <a href="?page={{ pages }}"><strong>>>></strong></a>
         {% endif %}
 {#        <div class="dropdown">#}
 {#            <br>#}
