@@ -120,3 +120,19 @@ def execute_dml_statement(statement, variables=None):
             except psycopg2.ProgrammingError as pe:
                 pass
     return result
+
+
+def get_table_header(sorted_by):
+    match sorted_by:
+        case 'most-rated':
+            return 'rating'
+        case 'title':
+            return 'title'
+        case 'year':
+            return 'year'
+        case 'runtime':
+            return 'runtime'
+        case _:
+            return 'rating'
+
+

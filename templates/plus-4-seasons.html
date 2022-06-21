@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}Ordered Shows{% endblock %}
+
+{% block body %}
+    <section>
+        <nav class="breadcrumb">
+            <a href="/ordered-shows">Actor from year 2010-2012</a>
+        </nav>
+        <h1 class="title text-center">Actor from year 2010-2012</h1>
+        <div class="card text-center">
+            <table>
+                <thead id="tableHeadYear" data-order="desc">
+                    <tr>
+                        <th>ID</th>
+                        <th>Actor Name</th>
+                        <th>Death</th>
+                        <th>Character Name</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBodyYear">
+                    {% for show in shows %}
+                        <tr>
+                            <td>{{ show.name }}</td>
+                            <td>{{ show.year }}</td>
+                            <td>{% if show.trailer is not none %}<a href="{{ show.trailer }}">{{ show.trailer }}{% else %}No URL{% endif %}</a></td>
+                            <td>{{ show.seasons }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/plus4seasons.js') }}"></script>
+{% endblock %}

@@ -6,15 +6,27 @@
     <h1 class="title text-center">Shows</h1>
     <div class="card">
         <table>
+            <thead id="showsTableHeader">
             <tr>
-                <th class="action-column">Title</th>
-                <th>Year</th>
-                <th>Runtime</th>
-                <th>Rating</th>
-                <th>Genre</th>
-                <th class="action-column">Trailer</th>
-                <th class="action-column">Homepage</th>
+                <th>
+                    <a href="/shows/title/{% if order == 'desc' %}asc{% else %}desc{% endif %}">Title</a>
+                </th>
+                <th>
+                    <a href="/shows/year/{% if order == 'desc' %}asc{% else %}desc{% endif %}">Year</a>
+                </th>
+                <th>
+                    <a href="/shows/runtime/{% if order == 'desc' %}asc{% else %}desc{% endif %}">Runtime (min)</a>
+                </th>
+                <th>
+                    <a href="/shows/most-rated/{% if order == 'desc' %}asc{% else %}desc{% endif %}">Rating</a>
+                </th>
+                <th>Genres</th>
+                <th>Trailer</th>
+                <th>Homepage</th>
+
             </tr>
+            </thead>
+            <tbody id ='showsTableBody'>
             {% for show in shows %}
                 <tr>
                     <td><a href="/show/{{ show.id }}">{{ show.title }}</a></td>
@@ -27,6 +39,8 @@
                     </a></td>
                 </tr>
             {% endfor %}
+            </tbody>
+
         </table>
     </div>
     <div class="card text-center">
@@ -55,12 +69,12 @@
 
 
 
-        {% if page_now == pages %}
+        {% if page_now == all_pages %}
             >>
             <strong>>>></strong>
         {% else %}
             <a href="?page={{ page_now + 1 }}">>></a>
-            <a href="?page={{ pages }}"><strong>>>></strong></a>
+            <a href="?page={{ all_pages }}"><strong>>>></strong></a>
         {% endif %}
 {#        <div class="dropdown">#}
 {#            <br>#}
@@ -74,4 +88,6 @@
 
     </div>
 </section>
+        <script src="{{ url_for('static', filename='js/sorting.js') }}"></script>
+
 {% endblock %}

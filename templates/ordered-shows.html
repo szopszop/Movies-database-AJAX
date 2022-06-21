@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block title %}Ordered Shows{% endblock %}
+
+{% block body %}
+    <section>
+        <nav class="breadcrumb">
+            <a href="/ordered-shows">Ordered Shows</a>
+        </nav>
+        <h1 class="title text-center">Shows</h1>
+        <div class="card text-center">
+            <table>
+                <thead id="tableHead" data-order="desc">
+                    <tr>
+                        <th>Title</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for show in shows %}
+                        <tr>
+                            <td>{{ show.title }}</td>
+                            <td>{{ show.rating }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/ordered-shows.js') }}"></script>
+{% endblock %}

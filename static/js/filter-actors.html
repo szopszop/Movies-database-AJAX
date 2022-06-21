@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block title %}Filter Actors{% endblock %}
+
+{% block body %}
+    <section>
+        <nav class="breadcrumb">
+            <a href="/filter-actors">Filter Actors</a>
+        </nav>
+        <h1 class="title text-center">Actors</h1>
+        <div class="card">
+            <form>
+                <p class="form-element">
+                    <label class="form-element-label" for="genres">Genre:</label>
+                    <select name="genre" id="genres">
+                        {% for genre in genres %}
+                            <option value="{{ genre.name }}">{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <p class="form-element">
+                    <label class="form-element-label" for="name">Name:</label>
+                    <input type="text" name="name" id="name" placeholder="Search for actor name...">
+                </p>
+            </form>
+        </div>
+        <div class="card">
+            <ul id="actors">
+                {% for actor in actors %}
+                    <li>{{ actor.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/filter-actors.js') }}"></script>
+{% endblock %}
