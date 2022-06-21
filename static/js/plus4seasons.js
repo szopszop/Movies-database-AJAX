@@ -1,12 +1,13 @@
 const tableBody = document.querySelector('#tableBodySeasons');
+const tableHead = document.querySelector('#tableHeadSeasons');
 
-const getSeasons = async order => {
+const getSeasons = async phrase => {
     const response = await fetch('/plus-4-seasons', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify()
+        body: JSON.stringify({'phrase': phrase})
     });
     console.log(response)
     return await response.json();

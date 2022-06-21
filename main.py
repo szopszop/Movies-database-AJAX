@@ -83,7 +83,8 @@ def post_year_exam():
 def get_filter_actors():
     genres = queries.get_all_genres()
     actors = queries.get_filtered_actors()
-    return render_template('filter-actors.html', genres=genres, actors=actors)
+    return render_template('filter-actors.html', genres=genres, actors=actors,
+                           user=queries.get_user_by_username(session.get('username')))
 
 
 @app.route('/filter-actors', methods=['POST'])
@@ -92,19 +93,20 @@ def post_filter_actors():
     actors = queries.get_filtered_actors(data['genre'], data['name'])
     return jsonify(actors)
 
-#
-# @app.route('/plus-4-seasons')
-# def get_plus5seasons():
-#     seasons = queries.get_plus_4_seasons()
-#     return render_template('plus-4-seasons.html', seasons=seasons,
-#                            user=queries.get_user_by_username(session.get('username')))
-#
-#
-# @app.route('/plus-4-seasons', methods=['POST'])
-# def post_plus5seasons():
-#     data = request.get_json()
-#     print(data)
-#     seasons = queries.get_plus_4_seasons(data['phrase'])
+
+@app.route('/plus-4-seasons')
+def get_plus4seasons():
+    seasons = queries.get_plus_4_seasons()
+    print(seasons)
+    return render_template('plus-4-seasons.html', seasons=seasons,
+                           user=queries.get_user_by_username(session.get('username')))
+
+
+@app.route('/plus-4-seasons', methods=['POST'])
+def post_plus4seasons():
+    data = request.get_json()
+    seasons = queries.get_plus_4_seasons(data['phrase'])
+    return jsonify(seasons)
 
 
 @app.route('/register', methods=['POST'])

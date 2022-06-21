@@ -109,7 +109,6 @@ def get_actors_2010_2012(order='desc'):
 
 
 def get_plus_4_seasons(phrase=''):
-
     return data_manager.execute_select(
         """SELECT shows.title,
            shows.year,
@@ -117,7 +116,25 @@ def get_plus_4_seasons(phrase=''):
            COUNT(seasons.show_id) AS number_of_seasons
         FROM shows
         JOIN seasons ON shows.id = seasons.show_id
+        WHERE shows.title ILIKE %(phrase)s
         GROUP BY shows.title, shows.year, shows.trailer
         HAVING COUNT(seasons.show_id) >= 4
-        """)
+        """, variables={'phrase': f'%{phrase}%'})
 
+
+def get_all_genres():
+    return data_manager.execute_select("SELECT * FROM genres")
+
+
+def get_filtered_actors(genre='Action', name=''):
+    return data_manager.execute_select(
+        """SELECT a.name
+        FROM shows
+        JOIN show_genres sg on shows.id = sg.show_id
+        JOIN genres g on g.id = sg.genre_id
+        JOIN show_characters sc on shows.id = sc.show_id
+        JOIN actors a on a.id = sc.actor_id
+        WHERE g.name = %(genre)s AND a.name ILIKE %(name)s
+        GROUP BY a.name
+        LIMIT 20
+        """, variables={'genre': genre, 'name': f'%{name}%'})
