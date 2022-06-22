@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}Filter Birthday Actors{% endblock %}
+
+{% block body %}
+    <section>
+        <nav class="breadcrumb">
+            <a href="/filter-actors">Filter Birthday Actors</a>
+        </nav>
+        <h1 class="title text-center">Birthdays of Actors</h1>
+        <div class="card">
+            <form>
+                <p class="form-element">
+                    <label class="form-element-label" for="months2">Month:</label>
+                    <select id="months2">
+                        {% for month in months %}
+                            <option value="{{ month.month }}">{{ month.month }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <p class="form-element">
+                    <label class="form-element-label" for="actor_name">Name:</label>
+                    <input type="text" name="name" id="actor_name" placeholder="Search for actor name...">
+                </p>
+            </form>
+        </div>
+        <div class="card">
+            <ul id="month_actors">
+                {% for actor in actors %}
+                    <li>{{ actor.name }}</li>
+                    <li>{{ actor.month }}</li>
+                    <li>{{ actor.shows }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/birthday.js') }}"></script>
+{% endblock %}

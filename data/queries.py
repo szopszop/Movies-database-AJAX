@@ -119,6 +119,7 @@ def get_plus_4_seasons(phrase=''):
         WHERE shows.title ILIKE %(phrase)s
         GROUP BY shows.title, shows.year, shows.trailer
         HAVING COUNT(seasons.show_id) >= 4
+        LIMIT 20
         """, variables={'phrase': f'%{phrase}%'})
 
 
@@ -138,3 +139,25 @@ def get_filtered_actors(genre='Action', name=''):
         GROUP BY a.name
         LIMIT 20
         """, variables={'genre': genre, 'name': f'%{name}%'})
+
+
+def get_all_months():
+    return data_manager.execute_select("""
+        SELECT DISTINCT EXTRACT(month FROM actors.birthday) as month
+        FROM actors
+        ORDER BY month""")
+
+
+def get_birthday_actors(month=3, name=''):
+    return data_manager.execute_select("""
+        SELECT actors.name, EXTRACT(month FROM actors.birthday) as month,
+            ARRAY_AGG(DISTINCT shows.title) as shows
+        FROM actors
+        JOIN show_genres on show_genres.show_id = actors.id
+        JOIN shows on show_genres.show_id = shows.id
+        WHERE EXTRACT(month FROM actors.birthday) = %(month)s AND actors.name ILIKE %(name)s
+        GROUP BY actors.name, actors.birthday
+        LIMIT 20
+        """, variables={'month': month, 'name': f'%{name}%'})
+
+

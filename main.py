@@ -83,6 +83,7 @@ def post_year_exam():
 def get_filter_actors():
     genres = queries.get_all_genres()
     actors = queries.get_filtered_actors()
+    print(actors)
     return render_template('filter-actors.html', genres=genres, actors=actors,
                            user=queries.get_user_by_username(session.get('username')))
 
@@ -94,11 +95,29 @@ def post_filter_actors():
     return jsonify(actors)
 
 
+@app.route('/birthday')
+def get_birthday():
+    months = queries.get_all_months()
+    print(months)
+    actors = queries.get_birthday_actors()
+    print('actors', actors)
+    return render_template('birthday.html', months=months, actors=actors,
+                           user=queries.get_user_by_username(session.get('username')))
+
+
+@app.route('/birthday', methods=['POST'])
+def post_birthday():
+    data = request.get_json()
+    print(data)
+    actors = queries.get_birthday_actors(data['month'], data['name'])
+    return jsonify(actors)
+
+
 @app.route('/plus-4-seasons')
 def get_plus4seasons():
-    seasons = queries.get_plus_4_seasons()
-    print(seasons)
-    return render_template('plus-4-seasons.html', seasons=seasons,
+    shows = queries.get_plus_4_seasons()
+    print(shows)
+    return render_template('plus-4-seasons.html', shows=shows,
                            user=queries.get_user_by_username(session.get('username')))
 
 

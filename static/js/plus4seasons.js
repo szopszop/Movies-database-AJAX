@@ -1,43 +1,37 @@
-const tableBody = document.querySelector('#tableBodySeasons');
-const tableHead = document.querySelector('#tableHeadSeasons');
+const seasonSearchInput = document.querySelector('#nameSeason')
+const seasons = document.querySelector('#tableBodySeasons')
 
-const getSeasons = async phrase => {
-    const response = await fetch('/plus-4-seasons', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({'phrase': phrase})
-    });
-    console.log(response)
-    return await response.json();
-};
-
-const updateTableYears = data => {
-    tableBody.innerHTML = '';
-    console.log(data)
-
-    data.forEach(element => {
-        console.log(element)
-        tableBody.innerHTML += `<tr>
-                                    <td>${element.id}</td>
-                                    <td>${element.name}</td>
-                                    <td>${element.date}</td>
-                                    <td>${element.character}</td>
-                                </tr>`
-    });
-};
-
-tableHead.addEventListener('click', event => {
-    if(event.target.parentElement.parentElement.dataset.order === 'desc') {
-        event.target.parentElement.parentElement.dataset.order = 'asc';
-        getSeasons('asc').then(response => {
-            updateTableYears(response);
-        })
-    } else {
-        event.target.parentElement.parentElement.dataset.order = 'desc';
-        getSeasons('desc').then(response => {
-            updateTableYears(response);
-        })
+const requestSeasons = async (searchPhrase) => {
+    const response = await fetch('plus-4-seasons', {
+            method: 'POST',
+            headers:{
+            'Content-Type':'application/json'
+            },
+            body: JSON.stringify({'phrase': searchPhrase})
+            });
+            return await response.json()
     }
-});
+
+    const updateSeasons = () => {
+        const searchPhrase = seasonSearchInput.value
+
+        requestSeasons(searchPhrase)
+            .then(data => {
+                seasons.innerHTML = ''
+                data.forEach(season => {
+                    console.log(season.title)
+
+                    seasons.innerHTML += `<td>${season.title}</td>
+                                        <td>${season.year}</td>
+                                        <td>${season.trailer}</td>
+                                        <td>${season.number_of_seasons}</td>`
+                })
+            })
+            .catch(err => console.log(err))
+    }
+
+    const init = () => {
+    seasonSearchInput.addEventListener('input', updateSeasons)
+    }
+
+    init()

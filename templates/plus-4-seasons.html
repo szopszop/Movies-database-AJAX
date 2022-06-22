@@ -12,7 +12,7 @@
             <form>
                 <p class="form-element">
                     <label class="form-element-label" for="name">Name:</label>
-                    <input type="text" name="name" id="name" placeholder="Search for actor name...">
+                    <input type="text" name="name" id="nameSeason" placeholder="Search for actor name...">
                 </p>
             </form>
             <table>
@@ -27,7 +27,7 @@
                 <tbody id="tableBodySeasons">
                     {% for show in shows %}
                         <tr>
-                            <td>{{ show.name }}</td>
+                            <td>{{ show.title }}</td>
                             <td>{{ show.year }}</td>
                             <td>{% if show.trailer is not none %}<a href="{{ show.trailer }}">{{ show.trailer }}{% else %}No URL{% endif %}</a></td>
                             <td>{{ show.number_of_seasons }}</td>
